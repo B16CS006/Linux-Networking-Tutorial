@@ -18,15 +18,19 @@ Great for Docker developers of all levels!
 
 ## Tutorial
 ### Create Docker IN Docker (dind) container
-> sudo docker network create test
-> sudo docker run --rm --net test --name test --privileged docker:dind
-> sudo docker exec -it test sh
+```bash
+sudo docker network create test
+sudo docker run --rm --net test --name test --privileged docker:dind
+sudo docker exec -it test sh
+```
 
 Now we are going to use this container
 
 ### Create two bridge network(isolated)
-> docker network create net0
-> docker network create net1
+```bash
+docker network create net0
+docker network create net1
+```
 
 ### Create Router and containers
 - Router is in both network, while containers are in single network
@@ -42,13 +46,17 @@ Container0: net0(172.19.0.3)
 Container1: net1(172.20.0.3)
 ```
  
-> docker run -d --name router --net net0 --net net1 --cap-add=NET_ADMIN --entrypoint=sleep ubuntu infinity
-> docker run -d --name container0 --net net0 --cap-add=NET_ADMIN --entrypoint=sleep ubuntu infinity
-> docker run -d --name container1 --net net1 --cap-add=NET_ADMIN --entrypoint=sleep ubuntu infinity
+```bash
+docker run -d --name router --net net0 --net net1 --cap-add=NET_ADMIN --entrypoint=sleep ubuntu infinity
+docker run -d --name container0 --net net0 --cap-add=NET_ADMIN --entrypoint=sleep ubuntu infinity
+docker run -d --name container1 --net net1 --cap-add=NET_ADMIN --entrypoint=sleep ubuntu infinity
+```
 
 #### setup containers and router
 Exec to each containers and install require packages
-> apt update && apt install -y iproute2 iputils-ping tcpdump
+```bash
+apt update && apt install -y iproute2 iputils-ping tcpdump
+```
 
 ### Establishing connectivity between containers via router
 - Container0 can communicate router(172.19.0.2)
@@ -59,9 +67,11 @@ similarly when container1 wants to conect 172.19.0.2(router) then the packet wil
 
 For establishing communcation we need to router these packet via router, for that we need to add route using iproute2, since router already know how to forward packet, packet will reach to the desired destination
 
-on container0
-> ip route add 172.20.0.0/16 dev eth0 via 172.19.0.2
+```bash
+# on container0
+ip route add 172.20.0.0/16 dev eth0 via 172.19.0.2
 
-on container1
-> ip route add 172.19.0.0/16 dev eth0 via 172.20.0.2
+# on container1
+ip route add 172.19.0.0/16 dev eth0 via 172.20.0.2
+```
 
