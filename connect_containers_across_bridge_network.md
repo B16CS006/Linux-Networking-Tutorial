@@ -56,7 +56,7 @@ docker run -d --name container0 --net net0 --cap-add=NET_ADMIN --entrypoint=slee
 docker run -d --name container1 --net net1 --cap-add=NET_ADMIN --entrypoint=sleep ubuntu infinity
 ```
 
-#### setup containers and router
+#### Setup containers and router
 Exec to each containers and install require packages
 ```bash
 apt update && apt install -y iproute2 iputils-ping tcpdump
