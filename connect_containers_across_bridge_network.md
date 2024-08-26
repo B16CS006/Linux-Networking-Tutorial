@@ -48,7 +48,6 @@ Containers:
 - Router: net0(172.19.0.2), net1(172.20.0.2)
 - Container0: net0(172.19.0.3)
 - Container1: net1(172.20.0.3)
-```
  
 ```bash
 docker run -d --name router --net net0 --net net1 --cap-add=NET_ADMIN --entrypoint=sleep ubuntu infinity
