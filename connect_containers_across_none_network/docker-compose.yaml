@@ -1,0 +1,17 @@
+name: net-scratch
+
+services:
+  container1:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    network_mode: none
+    cap_add: [ "NET_ADMIN" ]
+
+  container2:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    network_mode: none
+    cap_add: [ "NET_ADMIN" ]
+
