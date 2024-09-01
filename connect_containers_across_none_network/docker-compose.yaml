@@ -1,4 +1,4 @@
-name: net-scratch
+name: none-network-connect
 
 services:
   container1:
@@ -9,9 +9,7 @@ services:
     cap_add: [ "NET_ADMIN" ]
 
   container2:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: ubuntu:latest
+    command: [ "sleep", "infinity" ]
     network_mode: none
-    cap_add: [ "NET_ADMIN" ]
 

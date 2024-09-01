@@ -38,12 +38,12 @@ apk update && apk add iproute2
 cd /data/tutorial/networking/none-network
 docker compose up -d
 
-pid1=$(docker inspect -f '{{.State.Pid}}' net-scratch-container1-1)
-pid2=$(docker inspect -f '{{.State.Pid}}' net-scratch-container2-1)
+pid1=$(docker inspect -f '{{.State.Pid}}' none-network-connect-container1-1)
+pid2=$(docker inspect -f '{{.State.Pid}}' none-network-connect-container2-1)
 echo $pid1 $pid2
 
 # create virtual ethernet
-ip link add veth1 type veth peer veth2
+ip link add veth1 type veth peer name veth2
 
 # move each end of ethernet to containers
 ip link set veth1 netns $pid1
@@ -57,7 +57,7 @@ nsenter --net=/proc/$pid2/ns/net ip link set veth2 up
 nsenter --net=/proc/$pid2/ns/net ip addr add 192.168.1.2/24 dev veth2
 
 # ping test
-docker exec net-scratch-container1-1 ping 192.168.1.2
-docker exec net-scratch-container2-1 ping 192.168.1.1
+docker exec none-network-connect-container1-1 ping 192.168.1.2
+docker exec none-network-connect-container2-1 ping 192.168.1.1
 ```
 
