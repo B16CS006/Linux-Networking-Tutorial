@@ -10,6 +10,7 @@ services:
       - ./certs:/certs/ca
       - ./var-lib-docker:/var/lib/docker:rw
       - ./data:/data:rw
+      - ./start.sh:/start.sh:r
     networks:
       - docker-in-docker
 
