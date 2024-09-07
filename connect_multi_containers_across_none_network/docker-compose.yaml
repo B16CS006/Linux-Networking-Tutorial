@@ -1,0 +1,19 @@
+name: none-network-multi-connect
+
+services:
+  container1:
+    image: ubuntu:latest
+    command: [ "sleep", "infinity" ]
+    network_mode: none
+
+  container2:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    network_mode: none
+
+  container3:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    network_mode: none
