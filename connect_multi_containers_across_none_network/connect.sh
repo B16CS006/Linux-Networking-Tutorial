@@ -9,7 +9,6 @@ export CONTAINERS="container1 container2 container3"
 export CIDR=24
 export CONTAINER_VETH_NAME=eth1
 export CONTAINER_BRIDGE_NAME=container_br
-export CONTAINER_BRIDGE_IP="192.168.11.0"
 
 container1_ip="192.168.11.1"
 container1_pid=""
@@ -60,7 +59,6 @@ for container in $CONTAINERS; do
 	echo " done"
 
 	echo -n "Connect one end of the ethernet cable(${CONTAINER_VETH_NAME}) to container and keep other on host for bridge..."; sleep "$SLEEP_TIME"
-	echo test
 	ip link set "${CONTAINER_VETH_NAME}" netns "${container_pid}"
 	echo " done"
 
@@ -82,10 +80,6 @@ echo -n "Create a network bridge..."
 ip link add "${CONTAINER_BRIDGE_NAME}" type bridge
 echo " done"
 
-echo -n "Add address to bridge interface(on host machine)..."
-ip addr add "${CONTAINER_BRIDGE_IP}/$CIDR" dev "${CONTAINER_BRIDGE_NAME}"
-echo " done"
-
 echo -n "Set bridge link up..."
 ip link set "${CONTAINER_BRIDGE_NAME}" up
 echo " done"
@@ -96,7 +90,6 @@ for container in $CONTAINERS; do
 	container_ip=$(eval  echo "\${${container}_ip}")
 
 	ip link set "${container}_veth" master "${CONTAINER_BRIDGE_NAME}"
-	nsenter --net="/proc/${container_pid}/ns/net" ip route add default via "${CONTAINER_BRIDGE_IP}"
 done
 echo " done"
 
